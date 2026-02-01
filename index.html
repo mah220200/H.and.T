@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinh nhật ngày 1/2</title>
+    <style>
+        /* Background động với gradient nhiều màu */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f7dc6f, #bb8fce);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header với tiêu đề và icon trang trí */
+        header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
+            font-size: 3em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Icon trang trí xung quanh */
+        .decor-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .decor-icons span {
+            position: absolute;
+            font-size: 2em;
+            color: rgba(255,255,255,0.7);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .decor-icons span:nth-child(1) { top: 10%; left: 10%; }
+        .decor-icons span:nth-child(2) { top: 20%; right: 15%; }
+        .decor-icons span:nth-child(3) { bottom: 30%; left: 20%; }
+        .decor-icons span:nth-child(4) { bottom: 10%; right: 10%; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Nút ở dưới cùng */
+        #openLetterBtn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+
+        #openLetterBtn:hover {
+            background: #ff3742;
+        }
+
+        /* Modal cho lời chúc */
+        #letterModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .letter-container {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+
+        .congratulations {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .congratulations p {
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        /* Nút thả tim */
+        #heartBtn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+
+        #heartBtn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Form gửi lời nhắn */
+        #messageForm {
+            margin-top: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #sendBtn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #sendBtn:hover {
+            background: #229954;
+        }
+
+        /* Thư mục ở góc phải */
+        #messageFolder {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 200px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #messageFolder h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .message-item {
+            background: #f9f9f9;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+
+        /* Nút đóng modal */
+        #closeModal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header với tiêu đề và icon trang trí -->
+    <header>
+        <h1>Chúc Mừng Sinh Nhật!</h1>
+        <div class="decor-icons">
+            <span>🎉</span>
+            <span>❤️</span>
+            <span>🎂</span>
+            <span>🌟</span>
+        </div>
+    </header>
+
+    <!-- Nút mở lời chúc ở dưới cùng -->
+    <button id="openLetterBtn">Mở Lời Chúc</button>
+
+    <!-- Modal cho lời chúc -->
+    <div id="letterModal">
+        <div class="letter-container">
+            <button id="closeModal">Đóng</button>
+            <div class="congratulations">
+                <p>Gửi bạn của Mah,</p>
+                <p>Hôm nay chính thức là ngày bạn được quyền vui vẻ gấp đôi, cười nhiều gấp bội và nhận lời chúc không giới hạn nha 😄✨</p>
+                <p>Chúc bạn bước sang tuổi mới với thật nhiều năng lượng tích cực, sức khỏe căng tràn và tinh thần lúc nào cũng lạc quan để “cân” hết mọi thử thách phía trước.</p>
+                <p>Tuổi mới mong bạn sẽ tự tin hơn một chút, mạnh mẽ hơn một chút và yêu bản thân mình nhiều hơn một chút. Có những ngày mệt, những lúc áp lực, nhưng hãy nhớ rằng bạn không hề một mình – luôn có gia đình, bạn bè và những người yêu quý bạn ở bên. Cứ cho phép mình sai, mình vấp, rồi đứng dậy trưởng thành hơn nhé 💪🌱</p>
+                <p>Chúc bạn học tập và công việc ngày càng suôn sẻ, ước mơ từng bước thành hiện thực, tiền bạc thì không cần quá nhiều nhưng niềm vui thì nhất định phải đầy 😆 Mong rằng mỗi ngày trôi qua đều có ít nhất một điều khiến bạn mỉm cười, dù chỉ là chuyện rất nhỏ.</p>
+                <p>Sinh nhật này và cả những sinh nhật sau nữa, chúc bạn luôn giữ được trái tim ấm áp, nụ cười rạng rỡ và tinh thần không bao giờ bỏ cuộc. Tuổi mới rồi, hãy sống hết mình, vui hết cỡ và tỏa sáng theo cách rất riêng của bạn nhé 🌟🎈</p>
+                <p>🎁 Sinh nhật vui vẻ nha!</p>
+                <button id="heartBtn">❤️</button>
+                <!-- Form gửi lời nhắn -->
+                <form id="messageForm">
+                    <textarea placeholder="Gửi lời nhắn của bạn..."></textarea>
+                    <button type="submit" id="sendBtn">Gửi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thư mục ở góc phải -->
+    <div id="messageFolder">
+        <h3>Thư Mục Lời Nhắn</h3>
+        <div id="messageList"></div>
+    </div>
+
+    <script>
+        // JavaScript để xử lý sự kiện
+        const openLetterBtn = document.getElementById('openLetterBtn');
+        const letterModal = document.getElementById('letterModal');
+        const heartBtn = document.getElementById('heartBtn');
+        const messageForm = document.getElementById('messageForm');
+        const messageList = document.getElementById('messageList');
+        const closeModal = document.getElementById('closeModal');
+
+        // Mở modal khi bấm nút (hiển thị lời chúc ngay lập tức)
+        openLetterBtn.addEventListener('click', () => {
+            letterModal.style.display = 'flex';
+        });
+
+        // Đóng modal
+        closeModal.addEventListener('click', () => {
+            letterModal.style.display = 'none';
+        });
+
+        // Thả tim (animation đơn giản)
+        heartBtn.addEventListener('click', () => {
+            heartBtn.innerHTML = '❤️❤️❤️❤️❤️';
+            setTimeout(() => {
+                heartBtn.innerHTML = 'Thả Tim ❤️';
+            }, 1000);
+        });
+
+        // Gửi lời nhắn và lưu vào thư mục
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = messageForm.querySelector('textarea').value;
+            if (message.trim()) {
+                // Lưu vào localStorage
+                let messages = JSON.parse(localStorage.getItem('messages')) || [];
+                messages.push(message);
+                localStorage.setItem('messages', JSON.stringify(messages));
+
+                // Hiển thị trong thư mục
+                displayMessages();
+
+                // Reset form
+                messageForm.querySelector('textarea').value = '';
+                alert('Lời nhắn đã được gửi!');
+            }
+        });
+
+        // Hàm hiển thị lời nhắn từ localStorage
+        function displayMessages() {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messageList.innerHTML = '';
+            messages.forEach(msg => {
+                const item = document.createElement('div');
+                item.className = 'message-item';
+                item.textContent = msg;
+                messageList.appendChild(item);
+            });
+        }
+
+        // Hiển thị lời nhắn khi tải trang
+        displayMessages();
+    </script>
+</body>
+</html>
